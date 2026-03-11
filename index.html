@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devstar Games | Core</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --neon-mor: #bc13fe;
+            --neon-mavi: #2400ff;
+            --cam: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background: #020005;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 50% 50%, #1a0033 0%, #020005 100%);
+            z-index: -2;
+        }
+        /* DEVSTAR LOGO CSS */
+        .devstar-logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: -15px; /* Başlığa biraz yaklaştırmak için */
+            z-index: 10;
+        }
+
+        .devstar-logo {
+            position: relative;
+            width: 80px;
+            height: 90px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--border);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            /* D harfi gibi görünmesi için hafif eğim */
+            transform: skewX(-5deg); 
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .devstar-logo:hover {
+            border-color: var(--neon-mor);
+            box-shadow: 0 0 30px rgba(188, 19, 254, 0.3);
+        }
+
+        /* Merkezdeki Yıldız Parçacığı */
+        .devstar-logo::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, var(--neon-mor), var(--neon-mavi));
+            box-shadow: 0 0 15px var(--neon-mor);
+            border-radius: 5px;
+            animation: pulsate 2s infinite alternate;
+        }
+
+        /* Yıldızın Işıma Efekti */
+        .devstar-logo::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 5px #fff, 0 0 40px 10px var(--neon-mavi);
+        }
+
+        @keyframes pulsate {
+            0% { transform: translate(-50%, -50%) rotate(45deg) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) rotate(45deg) scale(1.1); opacity: 1; }
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 10vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: 15px;
+            background: linear-gradient(to right, #fff, var(--neon-mor), var(--neon-mavi));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(188, 19, 254, 0.3));
+        }
+
+        .content-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 320px;
+            padding: 60px 40px;
+            background: var(--cam);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.6s cubic-bezier(0.2, 1, 0.2, 1);
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-15px);
+            border-color: var(--neon-mor);
+            background: rgba(188, 19, 254, 0.05);
+        }
+
+        .card h2 { font-family: 'Orbitron', sans-serif; margin-bottom: 20px; font-size: 1.6rem; }
+
+        .about-box {
+            background: rgba(255,255,255,0.02);
+            padding: 80px 40px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .highlight { color: var(--neon-mor); font-weight: 900; font-family: 'Orbitron'; }
+
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .social-btn {
+            padding: 12px 35px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            background: rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+
+        .social-btn:hover {
+            background: #ff0000;
+            box-shadow: 0 0 20px #ff0000;
+            border-color: #ff0000;
+        }
+
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .step {
+            background: rgba(255,255,255,0.03);
+            padding: 35px;
+            border-radius: 25px;
+            border-top: 3px solid var(--neon-mavi);
+            transition: 0.3s;
+        }
+
+        .step h4 { font-family: 'Orbitron', sans-serif; color: var(--neon-mor); margin-bottom: 15px; font-size: 1.2rem; }
+
+        footer {
+            padding: 60px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <section class="hero">
+        <header>
+            <h1>DEVSTAR</h1>
+            <p style="font-family:'Orbitron'; letter-spacing: 8px; opacity: 0.6; color: var(--neon-mavi);">ABSOLUTE ECOSYSTEM</p>
+        </header>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <a href="https://kuzeymurt00-blip.github.io/Website/" class="card">
+                <h2>Absolute Studicos</h2>
+                <p>Oyun geliştirme merkezi. <br>Yazılım ve oyun mekanikleriyle yeni dünyalar inşa ediyoruz.</p>
+            </a>
+            <a href="#" class="card">
+                <h2>Absolute Productions</h2>
+                <p>Görsel medya gücü. <br>Sinematik prodüksiyon ve kreatif kurgu ile zirveyi hedefliyoruz.</p>
+            </a>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="about-box">
+            <h2 style="font-family:'Orbitron'; margin-bottom: 30px;">VİZYONUMUZ</h2>
+            <p style="font-size: 1.2rem; line-height: 2; opacity: 0.9;">
+                <span class="highlight">Biz Devstars,</span> dijital dünyada imkansızı kodlamak için buradayız. <br> 
+                Teknoloji ve estetiği Absolute çatısı altında birleştirerek geleceği tasarlıyoruz.
+            </p>
+            <div class="socials">
+                <a href="https://youtube.com/@QLoLwTR1" class="social-btn" target="_blank">YOUTUBE: QLoLwTR1</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <h2 style="font-family:'Orbitron'; text-align: center; margin-bottom: 40px; color: var(--neon-mavi);">ROADMAP 2026</h2>
+        <div class="roadmap">
+            <div class="step">
+                <h4>01. ÇEYREK</h4>
+                <p>Absolute ekosisteminin teknolojik altyapısının kurulması.</p>
+            </div>
+            <div class="step">
+                <h4>02. ÇEYREK</h4>
+                <p>Geniş kapsamlı oyun duyuruları ve geliştirme sürecinde vites artışı.</p>
+            </div>
+            <div class="step" style="border-top-color: var(--neon-mor);">
+                <h4>03. ÇEYREK</h4>
+                <p><strong>Hiroki OS</strong> resmi çıkışı ve sistemsel devrim.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 DEVSTAR GAMES | THE ABSOLUTE WAY
+    </footer>
+
+</body>
+</html>
