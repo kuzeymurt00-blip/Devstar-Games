@@ -3,203 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devstar Games | Core</title>
+    <title>Devstar Games | Official Ecosystem</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Poppins:wght@300;400;600&family=Fira+Code:wght@300;500&display=swap');
-
         :root {
-            --neon-mor: #bc13fe;
-            --neon-mavi: #2400ff;
-            --cam: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.12);
+            --bg: #050810;
+            --grid: rgba(56, 189, 248, 0.05);
+            --accent: #00d2ff;
+            --card-bg: #111827;
+            --glass: rgba(17, 24, 39, 0.9);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-
-        body {
-            background: #020005;
-            color: #fff;
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: #e5e7eb;
+            font-family: 'Inter', system-ui, sans-serif;
+            user-select: none;
         }
 
-        /* --- ARKA PLAN --- */
-        .bg-glow {
-            position: fixed;
+        /* Sahne */
+        #viewport {
             width: 100vw; height: 100vh;
-            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), #1a0033 0%, #020005 80%);
-            z-index: -2;
+            cursor: grab;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* --- NAVİGASYON --- */
-        nav {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            z-index: 100; display: flex; gap: 10px;
-            background: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 50px;
-            backdrop-filter: blur(15px); border: 1px solid var(--border);
+        #viewport:active { cursor: grabbing; }
+
+        #canvas {
+            position: absolute;
+            width: 12000px; height: 12000px;
+            background-image: 
+                radial-gradient(var(--accent) 1px, transparent 1px),
+                linear-gradient(var(--grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+            background-size: 100px 100px, 40px 40px, 40px 40px;
+            transform-origin: 0 0;
+            will-change: transform;
         }
 
-        nav a {
-            color: #fff; text-decoration: none; font-family: 'Orbitron'; font-size: 0.7rem;
-            letter-spacing: 1px; padding: 6px 12px; transition: 0.3s; border-radius: 20px;
-        }
-
-        nav a:hover { background: var(--neon-mor); box-shadow: 0 0 15px var(--neon-mor); }
-
-        /* --- PANEL SİSTEMİ --- */
-        section {
-            min-height: 100vh;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 80px 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .panel-content {
-            max-width: 1200px; width: 100%;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-            align-items: center;
-        }
-
-        /* --- 3D KARTLAR --- */
+        /* Kartlar */
         .card {
-            background: var(--cam);
-            backdrop-filter: blur(30px);
-            border: 1px solid var(--border);
-            padding: 60px 40px; border-radius: 40px;
-            text-decoration: none; color: #fff;
-            transition: 0.1s ease-out;
-            transform-style: preserve-3d;
-            text-align: center;
+            position: absolute;
+            width: 240px;
+            background: var(--card-bg);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            z-index: 10;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
         }
 
         .card:hover {
-            border-color: var(--neon-mor);
-            background: rgba(188, 19, 254, 0.05);
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.3);
         }
 
-        .card h2 { font-family: 'Orbitron', sans-serif; margin-bottom: 20px; font-size: 2rem; }
-
-        /* --- HIROKI TERMINAL --- */
-        .terminal-box {
-            background: #000; padding: 30px; border-radius: 20px;
-            font-family: 'Fira Code', monospace; font-size: 0.9rem;
-            border: 1px solid var(--neon-mavi);
-            box-shadow: 0 0 30px rgba(36, 0, 255, 0.1);
-            transform: perspective(1000px);
+        .card h3 { 
+            margin: 0; font-size: 17px; color: var(--accent); 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        
+        .card-desc {
+            font-size: 14px; margin-top: 12px;
+            display: none; border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 10px; color: #9ca3af; line-height: 1.5;
         }
 
-        .highlight { color: var(--neon-mor); font-weight: 900; font-family: 'Orbitron'; }
+        .card.open .card-desc { display: block; animation: fadeIn 0.4s ease; }
 
-        .btn-link {
-            display: inline-block; margin-top: 25px; padding: 12px 35px;
-            border-radius: 100px; border: 1px solid var(--neon-mor);
-            color: #fff; text-decoration: none; font-family: 'Orbitron';
-            background: rgba(255,255,255,0.05); transition: 0.3s;
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card-btn {
+            display: inline-block; margin-top: 12px;
+            background: linear-gradient(135deg, var(--accent), #3a7bd5);
+            color: #000; padding: 8px 15px; border-radius: 8px;
+            text-decoration: none; font-size: 12px; font-weight: bold;
+            transition: 0.3s;
         }
-        .btn-link:hover { background: var(--neon-mor); box-shadow: 0 0 20px var(--neon-mor); }
 
-        @media (max-width: 900px) {
-            .panel-content { grid-template-columns: 1fr; text-align: center; }
-            nav { width: 90%; justify-content: center; }
+        /* Bağlantılar */
+        svg {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 5;
+        }
+
+        line { 
+            stroke: var(--accent); stroke-width: 2; opacity: 0.3; 
+            stroke-dasharray: 5; animation: flow 30s linear infinite; 
+        }
+
+        @keyframes flow { to { stroke-dashoffset: -100; } }
+
+        /* Arayüz */
+        #header {
+            position: fixed; top: 20px; left: 20px; z-index: 1000;
+            background: var(--glass); padding: 15px 25px; border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            pointer-events: none;
+        }
+
+        #focus-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--accent); color: #000;
+            border: none; padding: 12px 25px; border-radius: 30px;
+            font-weight: bold; cursor: pointer; z-index: 1000;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-glow" id="glow"></div>
+<div id="header">
+    <h1 style="margin:0; font-size: 18px; color: var(--accent);">DEVSTAR GAMES <span style="color:#fff; opacity:0.5;">| ECOSYSTEM</span></h1>
+</div>
 
-    <nav>
-        <a href="#studio">STUDIOS</a>
-        <a href="#prod">PROD</a>
-        <a href="#hiroki">HIROKI OS</a>
-    </nav>
+<button id="focus-btn" onclick="focusCenter()">MERKEZE DÖN</button>
 
-    <section id="studio">
-        <div class="panel-content">
-            <div class="card" onmousemove="tilt(event, this)" onmouseleave="untilt(this)">
-                <span style="color: var(--neon-mavi); font-family: 'Orbitron'; font-size: 0.8rem;">// CORE_ACTIVE</span>
-                <h2>Absolute Studios</h2>
-                <p>Oyun geliştirme merkezi. Yazılım ve oyun mekanikleriyle yeni dünyalar inşa ediyoruz.</p>
-                <a href="https://kuzeymurt00-blip.github.io/Website/" class="btn-link">GİRİŞ YAP</a>
-            </div>
-            <div style="padding: 20px;">
-                <h3 style="font-family:'Orbitron'; color: var(--neon-mor); margin-bottom: 20px;">VİZYONUMUZ</h3>
-                <p style="font-size: 1.1rem; opacity: 0.8;">Biz Devstars, dijital dünyada imkansızı kodlamak için buradayız. Teknoloji ve estetiği Absolute çatısı altında birleştiriyoruz.</p>
-            </div>
+<div id="viewport">
+    <div id="canvas">
+        <svg id="connections"></svg>
         </div>
-    </section>
+</div>
 
-    <section id="prod">
-        <div class="panel-content">
-            <div style="text-align: right; padding: 20px;">
-                <h3 style="font-family:'Orbitron'; color: var(--neon-mavi); margin-bottom: 20px;">GÖRSEL GÜÇ</h3>
-                <p style="font-size: 1.1rem; opacity: 0.8;">Sinematik prodüksiyon ve kreatif kurgu ile zirveyi hedefliyoruz. Medyanın sınırlarını biz çiziyoruz.</p>
-            </div>
-            <div class="card" onmousemove="tilt(event, this)" onmouseleave="untilt(this)">
-                <span style="color: var(--neon-mor); font-family: 'Orbitron'; font-size: 0.8rem;">// MEDIA_READY</span>
-                <h2>Absolute Productions</h2>
-                <p>Görsel medya gücü. Sinematik kurgu ve yaratıcı prodüksiyonun merkezi.</p>
-                <a href="https://kuzeymurt00-blip.github.io/AbsoluteProductions/" class="btn-link">KEŞFET</a>
-            </div>
-        </div>
-    </section>
+<script>
+    const viewport = document.getElementById('viewport');
+    const canvas = document.getElementById('canvas');
+    const svg = document.getElementById('connections');
+    
+    // TÜM VERİLERİN (KİLİTLİ)
+    const cards = [{"id":1776525705060,"title":"Devstar Games","desc":"Herşey b şirkete bağlıdır toplayıcı görevi görür","url":"https://kuzeymurt00-blip.github.io/Devstar-Games","x":5080,"y":4201,"isOpen":true},{"id":1776525780348,"title":"Absolute Studios","desc":"Oyunlar ve Websitelerin yapıldığı kısımdır ","url":"https://kuzeymurt00-blip.github.io/Website/","x":4763,"y":4616,"isOpen":true},{"id":1776525811271,"title":"Absolute Productions","desc":"Garip şarkıların çıktığı yerdir","url":"https://kuzeymurt00-blip.github.io/AbsoluteProductions/","x":5447,"y":4633,"isOpen":true},{"id":1776525864781,"title":"Projeler","desc":"Yazılım ve Oyun Geliştirme","url":"","x":4757,"y":4832,"isOpen":true},{"id":1776525895633,"title":"Valozırto ","desc":"Valorantta skine para vermek istemeyenler için yapılmıış offline bi oyun","url":"","x":4742,"y":4988,"isOpen":true},{"id":1776525928701,"title":"I'm Behind You","desc":"Kısa süreli korku oyunu ","url":"","x":4436,"y":4996,"isOpen":true},{"id":1776525959688,"title":"Apex Overdrive","desc":"Yarış Oyunu en hızlı olan ez win","url":"","x":5054,"y":4990,"isOpen":true},{"id":1776526316113,"title":"Kadre Phonk","desc":"saçma bi şarkı işte ","url":"","x":5793,"y":4617,"isOpen":true},{"id":1776526554020,"title":"Hiroki OS ","desc":"Durdurulan Linux Debian tabanlı işletim sistemi","url":"","x":4422,"y":5157.5,"isOpen":true},{"id":1776526598497,"title":"Absolute Launcher","desc":"Otomatik güncellemeli başlatıcı sistemi","url":"","x":5049,"y":5150.5,"isOpen":true},{"id":1776526669297,"title":"Absolute Brwser","desc":"Oyun odaklı özelleştirilmiş tarayıcı","url":"","x":4722,"y":5166.5,"isOpen":true},{"id":1776526737017,"title":"Geliştiriciler","desc":"Devstar Gameste çalışan HERKES","url":"","x":5629,"y":4897.5,"isOpen":true},{"id":1776526798336,"title":"Kuzey Murat(Kurucu)","desc":"ben herşeyi yapıyom ","url":"","x":5442,"y":5009.5,"isOpen":true},{"id":1776526816617,"title":"Ayaz ","desc":"Modellemeci","url":"","x":5803,"y":5003.5,"isOpen":true},{"id":1776526829635,"title":"Çağrı ","desc":"Senaristtt","url":"","x":5448,"y":5167.5,"isOpen":true},{"id":1776526846829,"title":"Hayrettin","desc":"Arrrrrrrrtist","url":"","x":5818,"y":5162.5,"isOpen":true},{"id":1776527610251,"title":"İsmail ","desc":"Logocu","url":"","x":5443,"y":5325.5,"isOpen":false},{"id":1776527650271,"title":"Kılıç Oyun","desc":"Partner Stüdyo","url":"","x":5816,"y":5328.5,"isOpen":false},{"id":1776527720087,"title":"Sponsor&Destekçiler","desc":"Ekosistemi destekleyenler","url":"","x":6199,"y":5332.5,"isOpen":false},{"id":1776527734648,"title":"Yakup","desc":"Destekçi","url":"","x":5814,"y":5427.5,"isOpen":false}];
+    
+    const conns = [{"from":1776525705060,"to":1776525780348},{"from":1776525705060,"to":1776525811271},{"from":1776525780348,"to":1776525864781},{"from":1776525864781,"to":1776525895633},{"from":1776525864781,"to":1776525928701},{"from":1776525864781,"to":1776525959688},{"from":1776525811271,"to":1776526316113},{"from":1776526554020,"to":1776525864781},{"from":1776525864781,"to":1776526598497},{"from":1776526669297,"to":1776525864781},{"from":1776525705060,"to":1776526737017},{"from":1776526737017,"to":1776526798336},{"from":1776526737017,"to":1776526816617},{"from":1776526737017,"to":1776526829635},{"from":1776526737017,"to":1776526846829},{"from":1776527610251,"to":1776526737017},{"from":1776527650271,"to":1776526737017},{"from":1776527720087,"to":1776527650271},{"from":1776527720087,"to":1776526737017},{"from":1776527720087,"to":1776527734648}];
 
-    <section id="hiroki">
-        <div class="panel-content" style="grid-template-columns: 1.2fr 0.8fr;">
-            <div class="terminal-box" onmousemove="tilt(event, this)" onmouseleave="untilt(this)">
-                <div style="color: #0f0; margin-bottom: 15px;">> root@absolute: ./hiroki_os --launch</div>
-                <p><span class="highlight">[KERNEL]</span> Gizli Mimari</p>
-                <p><span class="highlight">[SIZE]</span> Bilinmiyor</p>
-                <p><span class="highlight">[SECURITY]</span> ClamAV Entegre Koruma</p>
-                <br>
-                <p style="opacity: 0.7;">Microsoft servisleri çöpe atıldı. Donmayan, patlamayan, sadece özgürlük sunan bir deneyim.</p>
-                <p style="color: #ff0000; margin-top: 10px; font-weight: bold;">⚠ Bill Gates, kapıların kilidine dikkat et!</p>
-            </div>
-            <div>
-                <h2 style="font-family: 'Orbitron'; font-size: 2.5rem;">HIROKI <span class="highlight">OS</span></h2>
-                <p>Geleceğin işletim sistemi. Gereksiz hiçbir şey yok, sadece performans.</p>
-                <div style="margin-top: 20px;">
-                    <a href="https://youtube.com/@QLoLwTR1" class="btn-link" target="_blank" style="background: #f00; border-color: #f00;">YOUTUBE</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    let camX = -4800, camY = -4100;
+    let isPanning = false;
+    let startMouseX, startMouseY;
 
-    <footer>
-        &copy; 2026 DEVSTAR GAMES | THE ABSOLUTE WAY
-    </footer>
+    function init() {
+        updateCam();
+        render();
+        window.addEventListener('contextmenu', e => e.preventDefault());
+    }
 
-    <script>
-        // Arka plan parlama hareketi
-        const glow = document.getElementById('glow');
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-            glow.style.setProperty('--mx', x + '%');
-            glow.style.setProperty('--my', y + '%');
+    // Kamera Sürükleme
+    viewport.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.card-btn')) return;
+        isPanning = true;
+        startMouseX = e.clientX - camX;
+        startMouseY = e.clientY - camY;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (isPanning) {
+            camX = e.clientX - startMouseX;
+            camY = e.clientY - startMouseY;
+            updateCam();
+        }
+    });
+
+    window.addEventListener('mouseup', () => isPanning = false);
+
+    function updateCam() {
+        canvas.style.transform = `translate(${camX}px, ${camY}px)`;
+    }
+
+    function focusCenter() {
+        camX = -4850; camY = -4100; updateCam();
+    }
+
+    function render() {
+        canvas.querySelectorAll('.card').forEach(c => c.remove());
+        
+        cards.forEach(card => {
+            const div = document.createElement('div');
+            div.className = `card ${card.isOpen ? 'open' : ''}`;
+            div.style.left = card.x + 'px';
+            div.style.top = card.y + 'px';
+            
+            let btn = card.url ? `<a href="${card.url}" target="_blank" class="card-btn">ZİYARET ET</a>` : '';
+            div.innerHTML = `<h3>${card.title}</h3><div class="card-desc">${card.desc}<br>${btn}</div>`;
+
+            div.onclick = (e) => {
+                if(e.target.classList.contains('card-btn')) return;
+                card.isOpen = !card.isOpen;
+                div.classList.toggle('open');
+            };
+
+            canvas.appendChild(div);
         });
 
-        // Gelişmiş 3D Tilt Efekti
-        function tilt(e, el) {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
+        drawLines();
+    }
 
-            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-        }
+    function drawLines() {
+        svg.innerHTML = '';
+        conns.forEach(conn => {
+            const c1 = cards.find(c => c.id === conn.from);
+            const c2 = cards.find(c => c.id === conn.to);
+            if(c1 && c2) {
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", c1.x + 120); line.setAttribute("y1", c1.y + 40);
+                line.setAttribute("x2", c2.x + 120); line.setAttribute("y2", c2.y + 40);
+                svg.appendChild(line);
+            }
+        });
+    }
 
-        function untilt(el) {
-            el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
-        }
-    </script>
+    init();
+</script>
 </body>
 </html>
